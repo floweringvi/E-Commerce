@@ -48,7 +48,22 @@ router.post('/', async (req, res) => {
   // create a new tag
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
+  try{
+    const tagData = await Tag.update(req.body, {
+      where: {
+        id: req.params.id
+      },
+    });
+
+    if(!tagData){
+      res.status(404).json({message:"No such tag to update!"});
+      return;
+    }
+    res.status(200).json(tagData);
+  } catch(err) {
+    res.status(500).json(err)
+  }
   // update a tag's name by its `id` value
 });
 
